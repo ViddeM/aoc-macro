@@ -114,5 +114,16 @@ pub fn generate_day(day_year: TokenStream) -> TokenStream {
             println!("{}", solution);
         }
 
+        #[bench]
+        fn bench_part_1(b: &mut Bencher) {
+            let input = download_or_read_input();
+            b.iter(|| solve_part_one(&input))
+        }
+
+        #[bench]
+        fn bench_part_2(b: &mut Bencher) {
+            let input = download_or_read_input();
+            b.iter(|| solve_part_two(&input))
+        }
     })
 }
