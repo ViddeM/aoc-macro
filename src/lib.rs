@@ -1,3 +1,5 @@
+#![feature(test)]
+
 use proc_macro::TokenStream;
 use quote::quote;
 use syn::{parse_macro_input, punctuated::Punctuated, LitInt, Token};
@@ -114,16 +116,22 @@ pub fn generate_day(day_year: TokenStream) -> TokenStream {
             println!("{}", solution);
         }
 
-        #[bench]
-        fn bench_part_1(b: &mut Bencher) {
-            let input = download_or_read_input();
-            b.iter(|| solve_part_one(&input))
-        }
+        #[cfg(test)]
+        mod test {
+            extern crate test;
+            use crate::download_or_read_input;
 
-        #[bench]
-        fn bench_part_2(b: &mut Bencher) {
-            let input = download_or_read_input();
-            b.iter(|| solve_part_two(&input))
+            #[bench]
+            fn bench_part_1(b: &mut Bencher) {
+                let input = download_or_read_input();
+                b.iter(|| solve_part_one(&input))
+            }
+
+            #[bench]
+            fn bench_part_2(b: &mut Bencher) {
+                let input = download_or_read_input();
+                b.iter(|| solve_part_two(&input))
+            }
         }
     })
 }
