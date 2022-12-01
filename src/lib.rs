@@ -28,7 +28,7 @@ pub fn generate_day(day_year: TokenStream) -> TokenStream {
         };
 
         use reqwest::blocking::Client;
-        use solution::{solve_part_one, solve_part_two};
+        use solution::{solve_part_one, solve_part_two, parse};
 
         const YEAR: u32 = #year;
         const DAY: u32 = #day;
@@ -108,10 +108,11 @@ pub fn generate_day(day_year: TokenStream) -> TokenStream {
 
         fn handle_day() {
             let input = download_or_read_input();
+            let parsed = parse(&input);
 
             let solution = match Part::from_env() {
-                Part::One => solve_part_one(&input),
-                Part::Two => solve_part_two(&input),
+                Part::One => solve_part_one(&parsed),
+                Part::Two => solve_part_two(&parsed),
             };
             println!("{}", solution);
         }
@@ -121,18 +122,26 @@ pub fn generate_day(day_year: TokenStream) -> TokenStream {
             extern crate test;
             use test::Bencher;
             use crate::download_or_read_input;
-            use crate::solution::{solve_part_one, solve_part_two};
+            use crate::solution::{solve_part_one, solve_part_two, parse};
+
+            #[bench]
+            fn bench_parse(b: &mut Bencher) {
+                let input = download_or_read_input();
+                b.iter(|| parse(&input))
+            }
 
             #[bench]
             fn bench_part_1(b: &mut Bencher) {
                 let input = download_or_read_input();
-                b.iter(|| solve_part_one(&input))
+                let parsed = parse(&input);
+                b.iter(|| solve_part_one(&parsed))
             }
 
             #[bench]
             fn bench_part_2(b: &mut Bencher) {
                 let input = download_or_read_input();
-                b.iter(|| solve_part_two(&input))
+                let parsed = parse(&input);
+                b.iter(|| solve_part_two(&parsed))
             }
         }
     })
