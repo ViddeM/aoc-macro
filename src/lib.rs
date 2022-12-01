@@ -119,6 +119,7 @@ pub fn generate_day(day_year: TokenStream) -> TokenStream {
         #[cfg(test)]
         mod test {
             extern crate test;
+            use test::Bencher;
             use crate::download_or_read_input;
 
             #[bench]
