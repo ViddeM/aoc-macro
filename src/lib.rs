@@ -121,6 +121,7 @@ pub fn generate_day(day_year: TokenStream) -> TokenStream {
             extern crate test;
             use test::Bencher;
             use crate::download_or_read_input;
+            use crate::solution::{solve_part_one, solve_part_two};
 
             #[bench]
             fn bench_part_1(b: &mut Bencher) {
