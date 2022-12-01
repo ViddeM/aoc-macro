@@ -108,11 +108,10 @@ pub fn generate_day(day_year: TokenStream) -> TokenStream {
 
         fn handle_day() {
             let input = download_or_read_input();
-            let mut parsed = parse(&input);
 
             let solution = match Part::from_env() {
-                Part::One => solve_part_one(&mut parsed),
-                Part::Two => solve_part_two(&mut parsed),
+                Part::One => solve_part_one(parse(&input)),
+                Part::Two => solve_part_two(parse(&input)),
             };
             println!("{}", solution);
         }
@@ -133,15 +132,13 @@ pub fn generate_day(day_year: TokenStream) -> TokenStream {
             #[bench]
             fn bench_part_1(b: &mut Bencher) {
                 let input = download_or_read_input();
-                let mut parsed = parse(&input);
-                b.iter(|| solve_part_one(&mut parsed))
+                b.iter(|| solve_part_one(parse(&input)))
             }
 
             #[bench]
             fn bench_part_2(b: &mut Bencher) {
                 let input = download_or_read_input();
-                let mut parsed = parse(&input);
-                b.iter(|| solve_part_two(&mut parsed))
+                b.iter(|| solve_part_two(parse(&input)))
             }
         }
     })
