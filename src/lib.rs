@@ -132,15 +132,13 @@ pub fn generate_day(day_year: TokenStream) -> TokenStream {
             #[bench]
             fn bench_part_1(b: &mut Bencher) {
                 let input = download_or_read_input();
-                let parsed = parse(&input);
-                b.iter(|| solve_part_one(parsed.to_owned()))
+                b.iter(|| solve_part_one(parse(&input)))
             }
 
             #[bench]
             fn bench_part_2(b: &mut Bencher) {
                 let input = download_or_read_input();
-                let parsed = parse(&input);
-                b.iter(|| solve_part_two(parsed.to_owned()))
+                b.iter(|| solve_part_two(parse(&input)))
             }
         }
     })
