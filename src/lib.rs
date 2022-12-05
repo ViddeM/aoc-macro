@@ -76,16 +76,13 @@ pub fn generate_day(day_year: TokenStream) -> TokenStream {
             if file_path.exists() {
                 // File exists, return its content
                 fs::read_to_string(file_path).expect("Failed to read input file")
-            } else if cfg!(download_input) {
+            } else {
                 // The file doesn't exist and we have the download_input feature enabled, download it.
-                println!("File doesn't exist, downloading...");
                 let data = download_input_data();
                 let mut file = File::create(file_path).expect("Failed to create input file");
                 file.write_all(data.as_bytes())
                     .expect("Failed to write downloaded input to file");
                 data
-            } else {
-                panic!("No input provided, maybe enable the `download_input` feature?");
             }
         }
 
@@ -96,8 +93,14 @@ pub fn generate_day(day_year: TokenStream) -> TokenStream {
             session_cookie.trim_end().to_string()
         }
 
+        #[cfg(not(feature = "download_input"))]
+        fn download_input_data() -> String {
+            panic!("No input provided, maybe enable the `download_input` feature?");
+        }
+
         #[cfg(feature = "download_input")]
         fn download_input_data() -> String {
+            println!("File doesn't exist, downloading...");
             let session_cookie = read_session_cookie();
 
             let url = format!("https://adventofcode.com/{}/day/{}/input", YEAR, DAY);
