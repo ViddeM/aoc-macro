@@ -87,8 +87,13 @@ pub fn generate_day(day_year: TokenStream) -> TokenStream {
         }
 
         fn read_session_cookie() -> String {
+            let session_cookie_path = match env::var("SESSION_COOKIE_FILEPATH") {
+                Ok(fp) => fp,
+                Err(_) => SESSION_COOKIE_FILE.to_string(),
+            };
+            
             let session_cookie =
-                fs::read_to_string(SESSION_COOKIE_FILE).expect("Failed to read session cookie file");
+                fs::read_to_string(session_cookie_path).expect("Failed to read session cookie file");
 
             session_cookie.trim_end().to_string()
         }
